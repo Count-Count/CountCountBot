@@ -697,7 +697,7 @@ class EditItem:
         pywikibot.warning("%s: %s" % (self.page, info))
 
     def getRevisions(self, rvstartid: int, rvendid: int) -> List[Dict[str, Any]]:
-        req = self.site._simple_request(
+        req = self.site.simple_request(
             action="query",
             prop="revisions",
             titles=self.page,
