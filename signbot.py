@@ -33,6 +33,7 @@
 #
 
 from dataclasses import dataclass
+import platform
 from typing import Any, Tuple, List, Optional, cast, Iterator, Callable, Pattern, Dict
 from datetime import datetime
 from datetime import timedelta
@@ -933,7 +934,10 @@ def FaultTolerantLiveRCPageGenerator(site: pywikibot.site.BaseSite) -> Iterator[
 
 
 def main() -> None:
-    locale.setlocale(locale.LC_ALL, "de_DE.utf8")
+    if platform.system() == "Darwin":
+        locale.setlocale(locale.LC_ALL, "de_DE.UTF-8")
+    else:
+        locale.setlocale(locale.LC_ALL, "de_DE.utf8")
     pywikibot.handle_args()
     Controller().run()
 
