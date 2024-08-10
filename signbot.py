@@ -106,9 +106,10 @@ class Controller(SingleSiteBot):
         self.reloadOptOut()
         self.reloadOptIn()
         self.botkey = os.environ.get("REDIS_KEY")
-        if not self.botkey:
-            raise Exception("REDIS_KEY environment variable not set")
-        self.redis = Redis(host="tools-redis" if os.name != "nt" else "localhost")
+        if self.botkey:
+            self.redis = Redis(host="tools-redis" if os.name != "nt" else "localhost")
+        else:
+            pywikibot.warning("REDIS_KEY environment variable not set - disabling notifications.")
         self.generator = FaultTolerantLiveRCPageGenerator(self.site)
         self.scheduler = sched.scheduler(time.time, time.sleep)
         self.stopped = False
@@ -259,6 +260,8 @@ class Controller(SingleSiteBot):
         return not user.isAnonymous() and user.editCount() > 500
 
     def checknotify(self, user: pywikibot.User) -> bool:
+        if not self.botkey:
+            return False
         if not Controller.doNotify:
             return False
         if user.isAnonymous():
@@ -279,6 +282,8 @@ class Controller(SingleSiteBot):
             return False
 
     def clearnotify(self, user: pywikibot.User) -> None:
+        if not self.botkey:
+            return
         if not Controller.doNotify:
             return
         if user.isAnonymous():
