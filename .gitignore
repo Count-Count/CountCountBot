@@ -1,7 +1,7 @@
 __pycache__
 .mypy_cache
 .venv
-apicache-py3/
+apicache/
 pywikibot.lwp
 throttle.ctrl
 user-config.py
